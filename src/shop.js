@@ -2,6 +2,11 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 import {Link} from 'react-router-dom';
 
+function subStrAfterChars(str, char)
+{
+    return str.substring(str.indexOf(char));
+}
+
 function Shop() {
 
     const APP_ID = '4767b429';
@@ -18,19 +23,21 @@ function Shop() {
     const fetchItems = async () => {
         const data = await fetch(`https://api.edamam.com/search?q=${query}&app_id=${APP_ID}&app_key=${APP_KEY}`);
         const items = await data.json();
-        console.log(items.hits);
         setItems(items.hits)
     }
 
     return (
         <div>
         {items.map(item => (
-            <h1 key={item.recipe.label}>
-                <Link to={`/shop/${item.recipe.uri}`}>{item.recipe.label}</Link>
+            <h1 key={item.recipe.uri}>
+                <Link to={`/shop/${subStrAfterChars(item.recipe.uri, '#')}`}>{item.recipe.label}</Link>
             </h1>
         ))}
         </div>
     );
 }
+
+
+
 
 export default Shop;
